@@ -1,4 +1,4 @@
-# aibot: experimental LLM trading bot (Binance + Claude)
+# Experimental LLM trading bot (Binance + Claude)
 
 The LLM is a **signal generator**. Plain code (the risk manager) decides whether anything gets traded.
 
