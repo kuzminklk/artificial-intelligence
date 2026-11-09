@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="theme-color" content="#101510" />
+		<meta
+			name="description"
+			content="SILVA — небольшая портретная серия о людях, лесе и зелёном свете. Четыре кадра, полноэкранный просмотр."
+		/>
+		<meta property="og:title" content="SILVA — люди в зелёном свете" />
+		<meta
+			property="og:description"
+			content="Четыре портрета среди листвы — о свете, который меняет всё, и о тишине, в которой человек становится собой."
+		/>
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content="img/04-inhale-1600.jpg" />
+		<meta property="og:image:width" content="1600" />
+		<meta property="og:image:height" content="2400" />
+		<meta property="og:image:alt" content="Женщина в лесу поднимает голову к свету" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="img/04-inhale-1600.jpg" />
+		<title>SILVA — люди в зелёном свете</title>
+		<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+		<link rel="preload" href="fonts/cormorant-garamond-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="stylesheet" href="style.css" />
+		<script>
+			document.documentElement.classList.add("js")
+		</script>
+	</head>
+	<body>
+		<a class="skip-link" href="#gallery">Перейти к галерее</a>
+		<div class="scroll-progress" aria-hidden="true"><span></span></div>
+		<div class="grain" aria-hidden="true"></div>
+
+		<header class="site-header" data-header>
+			<a class="brand" href="#top" aria-label="SILVA — на главную">
+				<svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+					<path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8M25.9 6.1 6.1 25.9" />
+					<circle cx="16" cy="16" r="3.2" />
+				</svg>
+				<span class="brand-name">SILVA</span>
+				<span class="brand-note">фотопроект</span>
+			</a>
+
+			<nav class="desktop-nav" aria-label="Основная навигация">
+				<a href="#about">О серии</a>
+				<a href="#gallery">Кадры</a>
+				<a href="#finale">Финал</a>
+			</nav>
+
+			<div class="header-side">
+				<span class="header-count"><b>04</b> кадра</span>
+				<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+					<span class="menu-toggle-label">Меню</span>
+					<span class="menu-toggle-icon" aria-hidden="true"><i></i><i></i></span>
+				</button>
+			</div>
+		</header>
+
+		<div class="mobile-menu" id="mobile-menu" aria-hidden="true" inert>
+			<nav aria-label="Мобильная навигация">
+				<a href="#about"><span>01</span> О серии</a>
+				<a href="#gallery"><span>02</span> Кадры</a>
+				<a href="#finale"><span>03</span> Финал</a>
+			</nav>
+			<div class="mobile-menu-meta">
+				<p>Портретная серия <br />Лес · свет · человек</p>
+				<span>Vol. 01 — 04 кадра</span>
+			</div>
+		</div>
+
+		<main id="top">
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="hero-glow" aria-hidden="true"></div>
+				<div class="hero-copy">
+					<p class="eyebrow hero-eyebrow"><i aria-hidden="true"></i> Фотопроект · природа и человек</p>
+					<h1 class="hero-title" id="hero-title">
+						<span class="hero-line">Люди</span>
+						<span class="hero-line">в <em>зелёном</em></span>
+						<span class="hero-line">свете<span class="accent-dot">.</span></span>
+					</h1>
+					<div class="hero-bottom">
+						<p class="hero-description">
+							Четыре портрета среди листвы — о свете, который меняет всё, и о тишине, в которой человек становится
+							собой.
+						</p>
+						<a class="round-link" href="#gallery" aria-label="Смотреть серию">
+							<span class="round-link-copy">Смотреть<br />серию</span>
+							<span class="round-link-arrow" aria-hidden="true">↓</span>
+						</a>
+					</div>
+					<div class="hero-meta">
+						<span>Vol. 01</span>
+						<span>Портретная серия</span>
+						<span>04 кадра</span>
+					</div>
+				</div>
+
+				<div class="hero-visual">
+					<div class="hero-stack">
+						<figure class="hero-frame hero-frame-main reveal" data-delay="1">
+							<div class="hero-frame-image">
+								<img
+									src="img/01-light-in-glass-1600.jpg"
+									srcset="img/01-light-in-glass-800.jpg 800w, img/01-light-in-glass-1600.jpg 1600w"
+									sizes="(max-width: 900px) 88vw, 36vw"
+									alt="Портрет девушки в круглых очках на фоне зелёной листвы"
+									width="1600"
+									height="2400"
+									fetchpriority="high"
+									decoding="async"
+								/>
+							</div>
+							<figcaption>
+								<span>01 — Свет в стекле</span>
+								<span class="hero-frame-arrow" aria-hidden="true">↘</span>
+							</figcaption>
+						</figure>
+
+						<figure class="hero-frame hero-frame-small reveal" data-delay="2">
+							<div class="hero-frame-image">
+								<img
+									src="img/03-forest-noon-800.jpg"
+									srcset="img/03-forest-noon-800.jpg 800w, img/03-forest-noon-1600.jpg 1600w"
+									sizes="(max-width: 900px) 32vw, 14vw"
+									alt="Мужчина стоит в лесу в пятнах солнечного света"
+									width="800"
+									height="1200"
+									decoding="async"
+								/>
+							</div>
+							<figcaption><span>03</span><span>Лесной полдень</span></figcaption>
+						</figure>
+					</div>
+
+					<div class="hero-vertical" aria-hidden="true">PORTRAIT STUDY · SILVA</div>
+					<div class="hero-seal" aria-hidden="true">
+						<svg viewBox="0 0 100 100">
+							<defs>
+								<path id="seal-circle" d="M50,50 m-34,0 a34,34 0 1,1 68,0 a34,34 0 1,1 -68,0" />
+							</defs>
+							<text><textPath href="#seal-circle">SILVA · PORTRAIT STUDY · 04 FRAMES ·</textPath></text>
+							<path class="seal-star" d="M50 34v32M34 50h32M39 39l22 22M61 39 39 61" />
+						</svg>
+					</div>
+				</div>
+			</section>
+
+			<div class="marquee" aria-hidden="true">
+				<div class="marquee-track">
+					<span>Свет</span><i>✳</i><span>Листва</span><i>✳</i><span>Тишина</span><i>✳</i><span>Взгляд</span><i>✳</i
+					><span>Лес</span><i>✳</i><span>Свет</span><i>✳</i><span>Листва</span><i>✳</i><span>Тишина</span><i>✳</i
+					><span>Взгляд</span><i>✳</i><span>Лес</span><i>✳</i>
+				</div>
+			</div>
+
+			<section class="manifesto" id="about" aria-labelledby="manifesto-title">
+				<div class="section-label reveal">
+					<span class="section-label-index">01</span>
+					<span>О серии</span>
+					<span class="section-label-line" aria-hidden="true"></span>
+				</div>
+				<div class="manifesto-grid">
+					<h2 class="manifesto-title reveal" id="manifesto-title">
+						Портрет — это <br />не только <br /><em>человек.</em>
+					</h2>
+					<div class="manifesto-copy reveal" data-delay="1">
+						<p>
+							Серия выросла из простого наблюдения: среди деревьев люди ведут себя иначе. Взгляд становится мягче, паузы
+							— длиннее, а свет будто договаривается с каждым по отдельности.
+						</p>
+						<p>Здесь важны не позы, а промежутки между ними. Четыре кадра, в которых лес — не фон, а ещё один герой.</p>
+						<div class="manifesto-signature" aria-hidden="true"><span>SILVA</span><span>Vol. 01</span></div>
+					</div>
+				</div>
+				<div class="stats reveal">
+					<div class="stat"><strong>04</strong><span>кадра</span></div>
+					<div class="stat"><strong>03</strong><span>героя</span></div>
+					<div class="stat"><strong>01</strong><span>лес</span></div>
+					<div class="stat stat-wide"><strong>∞</strong><span>тишины</span></div>
+				</div>
+			</section>
+
+			<section class="gallery-section" id="gallery" aria-labelledby="gallery-title">
+				<header class="gallery-head">
+					<div class="section-label reveal">
+						<span class="section-label-index">02</span>
+						<span>Кадры</span>
+						<span class="section-label-line" aria-hidden="true"></span>
+					</div>
+					<div class="gallery-heading">
+						<h2 class="gallery-title reveal" id="gallery-title">Четыре <br /><em>истории</em> света.</h2>
+						<p class="gallery-note reveal" data-delay="1">
+							Нажмите на фотографию, чтобы открыть её во весь экран. Внутри — навигация стрелками, клавиатурой или
+							свайпом.
+						</p>
+					</div>
+				</header>
+
+				<div class="photo-grid">
+					<article class="photo-card photo-card-a reveal">
+						<button class="photo-button" type="button" data-index="0" aria-label="Открыть кадр 1: Свет в стекле">
+							<span class="photo-frame">
+								<img
+									src="img/01-light-in-glass-800.jpg"
+									srcset="img/01-light-in-glass-800.jpg 800w, img/01-light-in-glass-1600.jpg 1600w"
+									sizes="(max-width: 900px) 92vw, 58vw"
+									alt="Портрет девушки в круглых очках на фоне зелёной листвы"
+									width="800"
+									height="1200"
+									loading="lazy"
+									decoding="async"
+								/>
+								<span class="photo-hover" aria-hidden="true"><i>Открыть кадр</i><b>↗</b></span>
+							</span>
+						</button>
+						<div class="photo-caption">
+							<span class="photo-number">01</span>
+							<div class="photo-info">
+								<h3>Свет в стекле</h3>
+								<p>Портрет · Лес</p>
+							</div>
+							<span class="photo-tag">Взгляд</span>
+						</div>
+					</article>
+
+					<div class="photo-column">
+						<article class="photo-card photo-card-b reveal" data-delay="1">
+							<button class="photo-button" type="button" data-index="1" aria-label="Открыть кадр 2: Пауза">
+								<span class="photo-frame">
+									<img
+										src="img/02-pause-800.jpg"
+										srcset="img/02-pause-800.jpg 800w, img/02-pause-1600.jpg 1600w"
+										sizes="(max-width: 900px) 45vw, 33vw"
+										alt="Портрет девушки в очках и сером свитшоте с нашивкой Community"
+										width="800"
+										height="1200"
+										loading="lazy"
+										decoding="async"
+									/>
+									<span class="photo-hover" aria-hidden="true"><i>Открыть кадр</i><b>↗</b></span>
+								</span>
+							</button>
+							<div class="photo-caption">
+								<span class="photo-number">02</span>
+								<div class="photo-info">
+									<h3>Пауза</h3>
+									<p>Портрет · Тень</p>
+								</div>
+								<span class="photo-tag">Тишина</span>
+							</div>
+						</article>
+						<aside class="grid-note reveal" data-delay="2">
+							<p>Свет не спрашивает разрешения. Он просто <em>остаётся</em>.</p>
+							<span>Портретная серия <br />SILVA · Vol. 01</span>
+						</aside>
+					</div>
+
+					<article class="photo-card photo-card-c reveal">
+						<button class="photo-button" type="button" data-index="2" aria-label="Открыть кадр 3: Лесной полдень">
+							<span class="photo-frame">
+								<img
+									src="img/03-forest-noon-800.jpg"
+									srcset="img/03-forest-noon-800.jpg 800w, img/03-forest-noon-1600.jpg 1600w"
+									sizes="(max-width: 900px) 92vw, 39vw"
+									alt="Мужчина стоит в лесу в пятнах солнечного света"
+									width="800"
+									height="1200"
+									loading="lazy"
+									decoding="async"
+								/>
+								<span class="photo-hover" aria-hidden="true"><i>Открыть кадр</i><b>↗</b></span>
+							</span>
+						</button>
+						<div class="photo-caption">
+							<span class="photo-number">03</span>
+							<div class="photo-info">
+								<h3>Лесной полдень</h3>
+								<p>Портрет · Солнце</p>
+							</div>
+							<span class="photo-tag">Свет</span>
+						</div>
+					</article>
+
+					<article class="photo-card photo-card-d reveal" data-delay="1">
+						<button class="photo-button" type="button" data-index="3" aria-label="Открыть кадр 4: Вдох">
+							<span class="photo-frame">
+								<img
+									src="img/04-inhale-800.jpg"
+									srcset="img/04-inhale-800.jpg 800w, img/04-inhale-1600.jpg 1600w"
+									sizes="(max-width: 900px) 92vw, 45vw"
+									alt="Женщина в лесу поднимает голову к свету"
+									width="800"
+									height="1200"
+									loading="lazy"
+									decoding="async"
+								/>
+								<span class="photo-hover" aria-hidden="true"><i>Открыть кадр</i><b>↗</b></span>
+							</span>
+						</button>
+						<div class="photo-caption">
+							<span class="photo-number">04</span>
+							<div class="photo-info">
+								<h3>Вдох</h3>
+								<p>Портрет · Воздух</p>
+							</div>
+							<span class="photo-tag">Лёгкость</span>
+						</div>
+					</article>
+				</div>
+
+				<p class="gallery-hint reveal">
+					<span aria-hidden="true">↳</span> Всего четыре кадра. Но у каждого — свой ритм.
+				</p>
+			</section>
+
+			<section class="finale" id="finale" aria-labelledby="finale-title">
+				<img
+					class="finale-image"
+					src="img/04-inhale-1600.jpg"
+					alt=""
+					width="1600"
+					height="2400"
+					loading="lazy"
+					decoding="async"
+				/>
+				<div class="finale-shade" aria-hidden="true"></div>
+				<div class="finale-content">
+					<div class="section-label section-label-light reveal">
+						<span class="section-label-index">03</span>
+						<span>Финал</span>
+					</div>
+					<blockquote class="finale-quote reveal" id="finale-title">
+						<p>«Лес не просит <br />быть <em>кем-то другим.</em>»</p>
+					</blockquote>
+					<div class="finale-bottom reveal" data-delay="1">
+						<p>Последний кадр серии — момент, когда можно просто поднять голову и вдохнуть.</p>
+						<button class="text-link" type="button" data-index="3">
+							Открыть кадр 04 <span aria-hidden="true">↗</span>
+						</button>
+					</div>
+				</div>
+				<span class="finale-index" aria-hidden="true">04 / 04</span>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<div class="footer-top">
+				<a class="footer-brand" href="#top" aria-label="SILVA — наверх"> <span>SILVA</span><sup>04</sup> </a>
+				<p class="footer-note">Небольшая портретная серия <br />о свете, листве и людях.</p>
+				<a class="footer-top-link" href="#top">Наверх <span aria-hidden="true">↑</span></a>
+			</div>
+			<div class="footer-nav">
+				<a href="#about">О серии</a>
+				<a href="#gallery">Кадры</a>
+				<a href="#finale">Финал</a>
+			</div>
+			<div class="footer-bottom">
+				<span>© 2026 SILVA</span>
+				<span>Портрет · Лес · Свет</span>
+				<span>Vol. 01 / 04</span>
+			</div>
+		</footer>
+
+		<dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-title" aria-describedby="lightbox-description">
+			<div class="lightbox-shell">
+				<header class="lightbox-header">
+					<div class="lightbox-brand">
+						<span class="lightbox-logo">SILVA</span>
+						<span class="lightbox-sub">Просмотр серии</span>
+					</div>
+					<span class="lightbox-counter" aria-hidden="true"><b id="lightbox-current">01</b> / 04</span>
+					<button class="lightbox-close" type="button" aria-label="Закрыть просмотр">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19" /></svg>
+					</button>
+				</header>
+
+				<div class="lightbox-stage">
+					<button class="lightbox-nav lightbox-prev" type="button" aria-label="Предыдущий кадр">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4 7 12l8 8" /></svg>
+					</button>
+					<figure class="lightbox-figure">
+						<img id="lightbox-image" alt="" width="1600" height="2400" />
+					</figure>
+					<button class="lightbox-nav lightbox-next" type="button" aria-label="Следующий кадр">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 4 8 8-8 8" /></svg>
+					</button>
+				</div>
+
+				<footer class="lightbox-footer">
+					<div class="lightbox-caption">
+						<div class="lightbox-caption-title">
+							<span id="lightbox-number">01</span>
+							<h2 id="lightbox-title">Свет в стекле</h2>
+						</div>
+						<p id="lightbox-description"></p>
+						<span class="lightbox-tag" id="lightbox-tag"></span>
+					</div>
+					<div class="lightbox-thumbs" role="group" aria-label="Выбор кадра">
+						<button class="lightbox-thumb" type="button" data-thumb="0" aria-label="Кадр 1: Свет в стекле">
+							<img src="img/01-light-in-glass-800.jpg" alt="" width="800" height="1200" loading="lazy" />
+						</button>
+						<button class="lightbox-thumb" type="button" data-thumb="1" aria-label="Кадр 2: Пауза">
+							<img src="img/02-pause-800.jpg" alt="" width="800" height="1200" loading="lazy" />
+						</button>
+						<button class="lightbox-thumb" type="button" data-thumb="2" aria-label="Кадр 3: Лесной полдень">
+							<img src="img/03-forest-noon-800.jpg" alt="" width="800" height="1200" loading="lazy" />
+						</button>
+						<button class="lightbox-thumb" type="button" data-thumb="3" aria-label="Кадр 4: Вдох">
+							<img src="img/04-inhale-800.jpg" alt="" width="800" height="1200" loading="lazy" />
+						</button>
+					</div>
+					<p class="lightbox-hint">
+						<span aria-hidden="true">← →</span> листать · <span aria-hidden="true">Esc</span> закрыть
+					</p>
+				</footer>
+			</div>
+			<p class="sr-only" id="lightbox-status" aria-live="polite"></p>
+		</dialog>
+
+		<script src="script.js"></script>
+	</body>
+</html>
