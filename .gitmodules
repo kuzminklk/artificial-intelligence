@@ -13,3 +13,6 @@
 [submodule "web/daniel-cosmo"]
 	path = web/daniel-cosmo
 	url = git@github.com:kuzminklk/daniel-cosmo.git
+[submodule "web/fairy-tail"]
+	path = web/fairy-tail
+	url = https://github.com/kuzminklk/fairy-tail
