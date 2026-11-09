@@ -6,28 +6,36 @@ Reads the original Lightroom JPEGs from ``web/fairy-tail/photos/`` and produces
 the complete set of web renditions consumed by the site:
 
     web/fairy-tail/assets/photos/
-        <slug>-1800.jpg   long side 1800 px, progressive JPEG, quality 84
-        <slug>-1800.webp  long side 1800 px, WebP quality 80, method 6
         <slug>-900.jpg    long side  900 px, progressive JPEG, quality 84
         <slug>-900.webp   long side  900 px, WebP quality 80, method 6
+        <slug>-1800.jpg   long side 1800 px, progressive JPEG, quality 84
+        <slug>-1800.webp  long side 1800 px, WebP quality 80, method 6
+        <slug>-2400.jpg   long side 2400 px, progressive JPEG, quality 84
+        <slug>-2400.webp  long side 2400 px, WebP quality 80, method 6
+        <slug>-3600.webp  long side 3600 px, WebP quality 80, method 6
+        <slug>-full.webp  ORIGINAL pixel size (no resize), WebP q80 method 6
         lqip/<slug>.jpg   ~24 px wide, blurred, JPEG quality 45
         manifest.json     machine-readable index of every generated file
 
     web/fairy-tail/fonts/ six woff2 files copied verbatim from forest-gallery
 
-Rules implemented (see task-1 description):
+Rules implemented (see task-1 and task-2 descriptions):
   * EXIF orientation is respected via ``ImageOps.exif_transpose``.
   * Originals are sRGB (verified by embedded ICC profiles), so saving plain RGB
     without an embedded profile keeps output in sRGB and strips metadata.
-  * Downscale uses LANCZOS; a mild unsharp mask is applied *after* the resize.
+  * Downscale uses LANCZOS; a mild unsharp mask is applied *after* the resize
+    (not on the full-size rendition, which is never resampled).
   * Aspect ratio is preserved; the long side is exactly the target size and the
     short side is rounded to the nearest pixel (never upscaled).
   * JPEG: progressive + optimize, quality 84. WebP: quality 80, method 6.
+  * 2400/3600/full exist so wide, landscape and HiDPI screens do not upscale a
+    1800 px rendition; 3600 and full are WebP-only (HiDPI browsers support it).
   * Originals are never modified.
 
 The script is idempotent: an output that already exists, is non-empty and is
-newer than its source is reused. Pass ``--force`` to regenerate everything.
-Pass ``--verify-only`` to re-validate existing outputs without writing.
+newer than its source is reused. A default run therefore only creates missing
+or stale variants. Pass ``--force`` to regenerate everything. Pass
+``--verify-only`` to re-validate existing outputs without writing.
 
 Usage:
     python3 scripts/optimize-images.py            # generate missing/stale files
@@ -98,12 +106,33 @@ FONT_FILES = [
 ]
 
 # --------------------------------------------------------------------------- #
+# Rendition matrix — the single source of truth for what gets generated.
+# Each row is (manifest key, target long side, formats to write). ``None`` as
+# the long side means "keep the original pixel size" (the full-size rendition).
+# Rows are ordered smallest -> largest so manifest.json reads naturally and the
+# legacy 900/1800 keys stay where they were.
+# --------------------------------------------------------------------------- #
+VARIANT_SPECS: list[tuple[str, int | None, tuple[str, ...]]] = [
+    ("w900", 900, ("jpg", "webp")),      # legacy thumbnail-sized rendition
+    ("w1800", 1800, ("jpg", "webp")),    # legacy default rendition
+    ("w2400", 2400, ("jpg", "webp")),    # 1440 px-wide / landscape displays
+    ("w3600", 3600, ("webp",)),          # near-original, HiDPI/retina (WebP)
+    ("full", None, ("webp",)),           # original pixels, WebP, no resize
+]
+VARIANT_SPECS_BY_KEY = {
+    key: (key, long_side, formats)
+    for key, long_side, formats in VARIANT_SPECS
+}
+LEGACY_SIZE_KEYS = ("w900", "w1800")
+NEW_SIZE_KEYS = ("w2400", "w3600", "full")
+
+# --------------------------------------------------------------------------- #
 # Encoding parameters (single source of truth for the whole pipeline).
 # --------------------------------------------------------------------------- #
-RENDITION_SIZES = (1800, 900)     # target long-side lengths, largest first
 JPEG_QUALITY = 84
 WEBP_QUALITY = 80
 WEBP_METHOD = 6                   # slowest / best WebP compression
+LQIP_REF_SIZE = 900               # long side the LQIP is derived from
 LQIP_WIDTH = 24                   # placeholder width in px (~24 px "wide")
 LQIP_QUALITY = 45
 LQIP_BLUR_RADIUS = 0.6            # Gaussian blur applied to the tiny placeholder
@@ -226,6 +255,45 @@ def avg_color_hex(img: Image.Image) -> str:
     return f"#{r:02x}{g:02x}{b:02x}"
 
 
+def variant_tag(long_side: int | None) -> str:
+    """Filename tag for a rendition: '900'/'1800'/... or 'full'."""
+    return "full" if long_side is None else str(long_side)
+
+
+def variant_paths(slug: str, key: str) -> dict[str, Path]:
+    """Absolute output paths ({ext: path}) for one slug/variant key."""
+    _, long_side, formats = VARIANT_SPECS_BY_KEY[key]
+    tag = variant_tag(long_side)
+    return {ext: ASSETS_DIR / f"{slug}-{tag}.{ext}" for ext in formats}
+
+
+def generate_variant(base: Image.Image, slug: str, key: str) -> tuple[int, int]:
+    """
+    Write one variant for ``slug`` from a decoded, oriented sRGB ``base`` image.
+
+    The 900/1800/2400 renditions are LANCZOS-downscaled and lightly sharpened;
+    ``full`` is written at the original pixel size without resampling or
+    sharpening (sharpening a native-resolution image only adds artefacts).
+    """
+    _, long_side, _ = VARIANT_SPECS_BY_KEY[key]
+    if long_side is None:
+        rend = base                 # no resize, no sharpen for "full"
+        owns_rend = False
+    else:
+        rend = resize_long_side(base, long_side).filter(SHARPEN)
+        owns_rend = True
+    try:
+        for ext, path in variant_paths(slug, key).items():
+            if ext == "jpg":
+                save_jpeg(rend, path, JPEG_QUALITY, progressive=True)
+            else:
+                save_webp(rend, path)
+        return rend.size
+    finally:
+        if owns_rend:
+            rend.close()
+
+
 # --------------------------------------------------------------------------- #
 # Fonts: copy the six woff2 files verbatim (byte-identical, idempotent)
 # --------------------------------------------------------------------------- #
@@ -254,15 +322,25 @@ def process_photo(slug: str, source: Path, force: bool = False) -> dict:
     """
     Generate (or reuse) every rendition for one photo and return its manifest
     entry with real generated dimensions and byte sizes.
+
+    Freshness is tracked per variant, so a default run only encodes the
+    variants that are missing or older than the original — existing 900/1800/
+    lqip files from earlier runs are left completely untouched.
     """
-    outputs = {
-        size: {ext: ASSETS_DIR / f"{slug}-{size}.{ext}" for ext in ("jpg", "webp")}
-        for size in RENDITION_SIZES
+    paths = {
+        key: variant_paths(slug, key)
+        for key, _, _ in VARIANT_SPECS
     }
     lqip_path = LQIP_DIR / f"{slug}.jpg"
-    need_work = force or not all(
-        is_fresh(p, source) for size in outputs.values() for p in size.values()
-    ) or not is_fresh(lqip_path, source)
+    stale = {
+        key: force or any(not is_fresh(p, source) for p in paths[key].values())
+        for key in paths
+    }
+    lqip_stale = force or not is_fresh(lqip_path, source)
+    need_work = any(stale.values()) or lqip_stale
+    generated_keys = [key for key in paths if stale[key]]
+    if lqip_stale:
+        generated_keys.append("lqip")
 
     if need_work:
         # ---- decode the original once (respecting EXIF orientation) ------- #
@@ -273,20 +351,19 @@ def process_photo(slug: str, source: Path, force: bool = False) -> dict:
             rgb = convert_to_srgb(oriented)  # sRGB; metadata still in .info
             rgb.info = {}                    # nothing may leak into outputs
             base_w, base_h = rgb.size
-            for size in RENDITION_SIZES:
-                rend = resize_long_side(rgb, size).filter(SHARPEN)
-                save_jpeg(rend, outputs[size]["jpg"], JPEG_QUALITY, progressive=True)
-                save_webp(rend, outputs[size]["webp"])
-                rend.close()
-            # LQIP: derive from the 900 px rendering, then blur the tiny copy.
-            ref = resize_long_side(rgb, RENDITION_SIZES[-1])
-            lqip = ref.resize(
-                (LQIP_WIDTH, max(1, round(ref.height * LQIP_WIDTH / ref.width))),
-                Image.Resampling.LANCZOS,
-            ).filter(ImageFilter.GaussianBlur(LQIP_BLUR_RADIUS))
-            save_jpeg(lqip, lqip_path, LQIP_QUALITY, progressive=False)
-            lqip.close()
-            ref.close()
+            for key, _, _ in VARIANT_SPECS:
+                if stale[key]:
+                    generate_variant(rgb, slug, key)
+            if lqip_stale:
+                # LQIP: derive from the 900 px rendering, then blur the tiny copy.
+                ref = resize_long_side(rgb, LQIP_REF_SIZE)
+                lqip = ref.resize(
+                    (LQIP_WIDTH, max(1, round(ref.height * LQIP_WIDTH / ref.width))),
+                    Image.Resampling.LANCZOS,
+                ).filter(ImageFilter.GaussianBlur(LQIP_BLUR_RADIUS))
+                save_jpeg(lqip, lqip_path, LQIP_QUALITY, progressive=False)
+                lqip.close()
+                ref.close()
         finally:
             rgb.close()
             oriented.close()
@@ -299,26 +376,37 @@ def process_photo(slug: str, source: Path, force: bool = False) -> dict:
     # For reused outputs the dimensions are read back from the files, so the
     # manifest always reports what actually exists rather than assumptions.
     sizes_entry: dict[str, dict] = {}
-    for size in RENDITION_SIZES:
-        with Image.open(outputs[size]["jpg"]) as jpg_probe, \
-                Image.open(outputs[size]["webp"]) as webp_probe:
-            if jpg_probe.format != "JPEG" or webp_probe.format != "WEBP":
-                raise SystemExit(f"ERROR: wrong output format for {slug} / {size}")
-            width, height = jpg_probe.size
-            if webp_probe.size != (width, height):
-                raise SystemExit(f"ERROR: jpg/webp size mismatch for {slug}/{size}")
-            fmt = {}
-            for ext, path in outputs[size].items():
-                fmt[ext] = {
-                    "file": path.name,
-                    "bytes": file_bytes(path),
-                }
-            sizes_entry[f"w{size}"] = {
-                "width": width,
-                "height": height,
-                "jpg": fmt["jpg"],
-                "webp": fmt["webp"],
-            }
+    for key, long_side, formats in VARIANT_SPECS:
+        dims: tuple[int, int] | None = None
+        fmt: dict[str, dict] = {}
+        for ext, path in paths[key].items():
+            expected_format = "JPEG" if ext == "jpg" else "WEBP"
+            with Image.open(path) as probe:
+                if probe.format != expected_format:
+                    raise SystemExit(
+                        f"ERROR: wrong output format for {slug}/{key}: "
+                        f"{probe.format}"
+                    )
+                if dims is None:
+                    dims = probe.size
+                elif probe.size != dims:
+                    raise SystemExit(
+                        f"ERROR: jpg/webp size mismatch for {slug}/{key}"
+                    )
+            fmt[ext] = {"file": path.name, "bytes": file_bytes(path)}
+        if dims is None:  # cannot happen: every variant writes >=1 format
+            raise SystemExit(f"ERROR: no rendition produced for {slug}/{key}")
+        if long_side is None:
+            if dims != (base_w, base_h):
+                raise SystemExit(
+                    f"ERROR: full rendition size {dims} != original "
+                    f"{(base_w, base_h)} for {slug}"
+                )
+        elif max(dims) != long_side:
+            raise SystemExit(
+                f"ERROR: {key} long side {max(dims)} != {long_side} for {slug}"
+            )
+        sizes_entry[key] = {"width": dims[0], "height": dims[1], **fmt}
 
     with Image.open(lqip_path) as lqip_probe:
         lqip_w, lqip_h = lqip_probe.size
@@ -326,7 +414,7 @@ def process_photo(slug: str, source: Path, force: bool = False) -> dict:
             raise SystemExit(f"ERROR: LQIP is not JPEG for {slug}")
 
     # avgColor from the 900 px JPEG (opened, downscaled to 1x1, closed).
-    with Image.open(outputs[RENDITION_SIZES[-1]]["jpg"]) as ref:
+    with Image.open(paths["w900"]["jpg"]) as ref:
         avg = avg_color_hex(ref)
 
     entry = {
@@ -335,9 +423,10 @@ def process_photo(slug: str, source: Path, force: bool = False) -> dict:
         "width": base_w,
         "height": base_h,
         "ratio": round(base_w / base_h, 4),
-        # Ascending size keys (w900 then w1800) to match the specification.
-        "sizes": {f"w{size}": sizes_entry[f"w{size}"]
-                  for size in sorted(RENDITION_SIZES)},
+        "original": {"width": base_w, "height": base_h},
+        # VARIANT_SPECS is ascending, so keys read w900, w1800, w2400,
+        # w3600, full — legacy fields preserved, new fields appended.
+        "sizes": sizes_entry,
         "lqip": {
             "file": f"lqip/{lqip_path.name}",
             "width": lqip_w,
@@ -346,14 +435,18 @@ def process_photo(slug: str, source: Path, force: bool = False) -> dict:
         },
         "avgColor": avg,
     }
-    status = "regenerated" if need_work else "reused"
+    status = "regenerated [" + ", ".join(generated_keys) + "]" \
+        if need_work else "reused"
     total = sum(
-        f["bytes"] for s in sizes_entry.values() for f in (s["jpg"], s["webp"])
+        fmt["bytes"] for size in sizes_entry.values()
+        for ext, fmt in size.items() if ext in ("jpg", "webp")
     ) + entry["lqip"]["bytes"]
+    dims_log = " ".join(
+        f"{key}:{sizes_entry[key]['width']}x{sizes_entry[key]['height']}"
+        for key, _, _ in VARIANT_SPECS
+    )
     log(
-        f"  {slug:14s} {base_w}x{base_h} -> "
-        f"1800:{sizes_entry['w1800']['width']}x{sizes_entry['w1800']['height']}, "
-        f"900:{sizes_entry['w900']['width']}x{sizes_entry['w900']['height']}, "
+        f"  {slug:14s} {base_w}x{base_h} -> {dims_log}, "
         f"lqip:{lqip_w}x{lqip_h} ({human_bytes(total)}, {status})"
     )
     return entry
@@ -365,14 +458,41 @@ def process_photo(slug: str, source: Path, force: bool = False) -> dict:
 def verify(manifest: list[dict]) -> None:
     log("\nVerifying generated assets ...")
     errors: list[str] = []
-    checked = 0
+    counts = {"legacy": 0, "new": 0, "lqip": 0}
     for entry in manifest:
-        for key, size in (("w900", 900), ("w1800", 1800)):
-            meta = entry["sizes"][key]
-            if max(meta["width"], meta["height"]) != size:
-                errors.append(f"{entry['slug']}/{key}: long side != {size}")
-            for ext, fmt in meta.items():
-                if ext in ("width", "height"):
+        orig_wh = (entry["width"], entry["height"])
+        original = entry.get("original")
+        if not isinstance(original, dict) or \
+                (original.get("width"), original.get("height")) != orig_wh:
+            errors.append(f"{entry['slug']}: bad or missing top-level 'original'")
+        for key, long_side, formats in VARIANT_SPECS:
+            meta = entry["sizes"].get(key)
+            if meta is None:
+                errors.append(f"{entry['slug']}: missing sizes.{key}")
+                continue
+            present = {ext for ext in meta if ext in ("jpg", "webp")}
+            if present != set(formats):
+                errors.append(
+                    f"{entry['slug']}/{key}: formats {sorted(present)} "
+                    f"!= expected {sorted(formats)}"
+                )
+            if long_side is None:
+                if (meta["width"], meta["height"]) != orig_wh:
+                    errors.append(
+                        f"{entry['slug']}/{key}: not original size "
+                        f"({meta['width']}x{meta['height']} != "
+                        f"{orig_wh[0]}x{orig_wh[1]})"
+                    )
+            elif max(meta["width"], meta["height"]) != long_side:
+                errors.append(
+                    f"{entry['slug']}/{key}: long side "
+                    f"{max(meta['width'], meta['height'])} != {long_side}"
+                )
+            bucket = "legacy" if key in LEGACY_SIZE_KEYS else "new"
+            for ext in formats:
+                fmt = meta.get(ext)
+                if not isinstance(fmt, dict):
+                    errors.append(f"{entry['slug']}/{key}: missing {ext} entry")
                     continue
                 path = ASSETS_DIR / fmt["file"]
                 if not path.is_file():
@@ -388,19 +508,33 @@ def verify(manifest: list[dict]) -> None:
                         errors.append(f"format {path}: {im.format}")
                     if im.size != (meta["width"], meta["height"]):
                         errors.append(f"dimensions {path}: {im.size}")
-                checked += 1
+                counts[bucket] += 1
         lqip_path = LQIP_DIR / Path(entry["lqip"]["file"]).name
         if not lqip_path.is_file():
             errors.append(f"missing {lqip_path}")
         else:
             with Image.open(lqip_path) as im:
                 im.verify()
-            checked += 1
-    expected_files = len(manifest) * 4 + len(manifest)
-    log(f"  opened & validated {checked} image files "
-        f"({len(manifest)*4} renditions + {len(manifest)} LQIP)")
-    if checked != expected_files:
-        errors.append(f"expected {expected_files} files, validated {checked}")
+            counts["lqip"] += 1
+
+    # Expected: 17 slugs x 2 legacy formats x 2 legacy sizes = 68 legacy,
+    # 17 slugs x (2400 jpg+webp + 3600 webp + full webp) = 68 new, 17 LQIP.
+    expected = {
+        "legacy": len(manifest) * 2 * 2,
+        "new": len(manifest) * (2 + 1 + 1),
+        "lqip": len(manifest),
+    }
+    log(
+        f"  validated {sum(counts.values())} image files = "
+        f"{counts['legacy']}/{expected['legacy']} legacy (900/1800) + "
+        f"{counts['new']}/{expected['new']} new (2400/3600/full) + "
+        f"{counts['lqip']}/{expected['lqip']} LQIP"
+    )
+    for bucket, expected_count in expected.items():
+        if counts[bucket] != expected_count:
+            errors.append(
+                f"{bucket}: expected {expected_count} files, got {counts[bucket]}"
+            )
     if errors:
         for error in errors:
             log(f"  FAIL {error}")
@@ -452,19 +586,27 @@ def main() -> int:
 
     verify(manifest)
 
-    renditions = len(SLUG_SOURCES) * len(RENDITION_SIZES) * 2
-    lqips = len(SLUG_SOURCES)
-    total = sum(
-        fmt["bytes"]
-        for entry in manifest
-        for size in entry["sizes"].values()
-        for ext, fmt in size.items()
-        if ext in ("jpg", "webp")
-    ) + sum(entry["lqip"]["bytes"] for entry in manifest)
+    def bytes_for(keys: tuple[str, ...]) -> int:
+        return sum(
+            fmt["bytes"]
+            for entry in manifest
+            for key in keys
+            for ext, fmt in entry["sizes"][key].items()
+            if ext in ("jpg", "webp")
+        )
+
+    legacy_bytes = bytes_for(LEGACY_SIZE_KEYS)
+    new_bytes = bytes_for(NEW_SIZE_KEYS)
+    lqip_bytes = sum(entry["lqip"]["bytes"] for entry in manifest)
+    total = legacy_bytes + new_bytes + lqip_bytes
+    legacy_count = len(manifest) * 2 * 2                    # 900 + 1800
+    new_count = len(manifest) * (2 + 1 + 1)                 # 2400 + 3600 + full
     log(
         f"Done in {time.time() - started:.1f}s: "
-        f"{renditions} renditions + {lqips} LQIP + manifest, "
-        f"{human_bytes(total)} total generated image bytes"
+        f"{legacy_count} legacy + {new_count} high-res renditions + "
+        f"{len(manifest)} LQIP + manifest, {human_bytes(total)} total "
+        f"(legacy {human_bytes(legacy_bytes)}, "
+        f"new {human_bytes(new_bytes)}, lqip {human_bytes(lqip_bytes)})"
     )
     return 0
 

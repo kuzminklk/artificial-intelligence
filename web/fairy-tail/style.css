@@ -1782,14 +1782,67 @@ dialog[open]::backdrop {
 		display: none;
 	}
 
+	/* Short landscape viewports: keep the chapter title below the fixed header
+	   and let long chapters grow downwards instead of overflowing above. */
 	.scene {
-		align-items: center;
-		padding-top: 110px;
-		padding-bottom: 60px;
+		align-items: flex-start;
+		padding-top: 82px;
+		padding-bottom: 34px;
+	}
+
+	.scene__inner {
+		grid-template-columns: minmax(0, min(560px, 62vw)) minmax(0, 1fr);
+	}
+
+	.scene__head {
+		gap: 5px;
+		margin-bottom: 12px;
+	}
+
+	.scene__numeral {
+		font-size: 0.5rem;
 	}
 
 	.scene__title {
-		font-size: 2.4rem;
+		font-size: clamp(1.8rem, 4.8vh, 2.5rem);
+	}
+
+	.poem {
+		font-size: clamp(0.86rem, 3.3vh, 1.02rem);
+		line-height: 1.42;
+	}
+
+	.poem .stanza {
+		margin-bottom: 0.55em;
+	}
+
+	.scene__caption {
+		display: none;
+	}
+
+	.finale {
+		align-items: flex-start;
+		justify-content: flex-start;
+		padding: 82px var(--gutter) 34px;
+	}
+
+	.finale__inner {
+		width: min(560px, 62vw);
+		margin: 0;
+	}
+
+	.finale .poem {
+		font-size: clamp(0.88rem, 3.2vh, 1rem);
+	}
+
+	.finale__title {
+		margin-top: 18px;
+		font-size: clamp(1.9rem, 5vw, 2.8rem);
+	}
+
+	.finale__note,
+	.finale__back {
+		margin-top: 14px;
 	}
 }
 

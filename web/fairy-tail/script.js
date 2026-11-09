@@ -60,6 +60,59 @@
 	/** Stage layers whose real photograph has been requested already. */
 	const requestedLayers = new Set();
 
+	/* The one landscape frame in the collection. All other photographs are
+	   2:3 portraits. Their real pixel widths differ, so width descriptors must
+	   be taken from the actual renditions, not from their long-side names. */
+	const LANDSCAPE_SLUGS = new Set(["16-dream-face"]);
+
+	const isLandscape = (slug) => LANDSCAPE_SLUGS.has(slug);
+
+	/** Actual pixel widths of the generated renditions, keyed by file suffix. */
+	function renditionWidths(slug) {
+		return isLandscape(slug)
+			? { 900: 900, 1800: 1800, 2400: 2400, 3600: 3600, full: 5472 }
+			: { 900: 600, 1800: 1200, 2400: 1600, 3600: 2400, full: 3648 };
+	}
+
+	/**
+	 * WebP candidates go up to the untouched original dimensions, so a wide or
+	 * HiDPI screen can pick a file that is not upscaled. JPEG fallbacks stop at
+	 * 2400px long side to keep the legacy path reasonable.
+	 */
+	function webpSrcset(slug) {
+		const w = renditionWidths(slug);
+		return [
+			`assets/photos/${slug}-900.webp ${w[900]}w`,
+			`assets/photos/${slug}-1800.webp ${w[1800]}w`,
+			`assets/photos/${slug}-2400.webp ${w[2400]}w`,
+			`assets/photos/${slug}-3600.webp ${w[3600]}w`,
+			`assets/photos/${slug}-full.webp ${w.full}w`,
+		].join(", ");
+	}
+
+	function jpgSrcset(slug) {
+		const w = renditionWidths(slug);
+		return [
+			`assets/photos/${slug}-900.jpg ${w[900]}w`,
+			`assets/photos/${slug}-1800.jpg ${w[1800]}w`,
+			`assets/photos/${slug}-2400.jpg ${w[2400]}w`,
+		].join(", ");
+	}
+
+	/**
+	 * The stage photo is object-fit: cover. On a portrait phone it is scaled by
+	 * height, so its rendered width is viewportHeight × imageRatio — usually
+	 * larger than 100vw. Passing that exact width to `sizes` stops the browser
+	 * from under-selecting a small file and keeps the landscape view sharp.
+	 */
+	function stageSizes(slug) {
+		const viewportWidth = window.innerWidth;
+		const viewportHeight = window.innerHeight;
+		const imageRatio = isLandscape(slug) ? 3 / 2 : 2 / 3;
+		const renderedWidth = Math.max(viewportWidth, viewportHeight * imageRatio);
+		return `${Math.ceil(renderedWidth)}px`;
+	}
+
 	/**
 	 * Inject a responsive <picture> into a stage layer and fade it in when the
 	 * file is ready. The LQIP painted by CSS sits underneath, so the transition
@@ -70,17 +123,18 @@
 		requestedLayers.add(layer.dataset.layer);
 
 		const slug = layer.dataset.photo;
+		const sizes = stageSizes(slug);
 		const picture = document.createElement("picture");
 		const source = document.createElement("source");
 		const img = document.createElement("img");
 
 		source.type = "image/webp";
-		source.srcset = `assets/photos/${slug}-900.webp 900w, assets/photos/${slug}-1800.webp 1800w`;
-		source.sizes = "100vw";
+		source.srcset = webpSrcset(slug);
+		source.sizes = sizes;
 
-		img.src = `assets/photos/${slug}-1800.jpg`;
-		img.srcset = `assets/photos/${slug}-900.jpg 900w, assets/photos/${slug}-1800.jpg 1800w`;
-		img.sizes = "100vw";
+		img.src = `assets/photos/${slug}-2400.jpg`;
+		img.srcset = jpgSrcset(slug);
+		img.sizes = sizes;
 		img.alt = "";
 		img.decoding = "async";
 		img.loading = "eager";
@@ -364,13 +418,26 @@
 	const lightboxNext = lightbox?.querySelector("[data-lightbox-next]");
 	let lightboxIndex = 0;
 
+	function lightboxSizes(slug) {
+		const ratio = isLandscape(slug) ? 3 / 2 : 2 / 3;
+		const maxWidth = Math.min(window.innerWidth * 0.9, 1500);
+		const maxHeight = window.innerHeight * 0.74;
+		return `${Math.max(1, Math.round(Math.min(maxWidth, maxHeight * ratio)))}px`;
+	}
+
 	function renderLightbox() {
 		const photo = photos[lightboxIndex];
 		if (!photo || !lightbox || !lightboxImg) return;
 
+		const sizes = lightboxSizes(photo.slug);
 		lightbox.classList.remove("is-loaded");
-		if (lightboxPictureSource) lightboxPictureSource.srcset = `assets/photos/${photo.slug}-1800.webp`;
-		lightboxImg.src = `assets/photos/${photo.slug}-1800.jpg`;
+		if (lightboxPictureSource) {
+			lightboxPictureSource.srcset = webpSrcset(photo.slug);
+			lightboxPictureSource.sizes = sizes;
+		}
+		lightboxImg.src = `assets/photos/${photo.slug}-2400.jpg`;
+		lightboxImg.srcset = jpgSrcset(photo.slug);
+		lightboxImg.sizes = sizes;
 		lightboxImg.alt = photo.alt;
 		if (lightboxCaption) lightboxCaption.textContent = `${photo.caption}`;
 		if (lightboxCounter) lightboxCounter.textContent = `${photo.num} / ${photos.length}`;
@@ -437,6 +504,43 @@
 			{ passive: true },
 		);
 	}
+
+	/* ---------------------------------------------------------------------- */
+	/* Responsive rendition refresh                                           */
+	/* ---------------------------------------------------------------------- */
+
+	/**
+	 * A phone or tablet can be rotated after the stage photos are already
+	 * loaded. Their `sizes` attribute is a fixed pixel value computed for the
+	 * old viewport, so it must be recomputed — otherwise the landscape view
+	 * keeps showing the portrait-sized file upscaled. Chrome and Safari
+	 * re-select a srcset candidate when `sizes` changes, so this is enough.
+	 */
+	function refreshRenditionSizes() {
+		document.querySelectorAll(".stage__layer img").forEach((img) => {
+			const layer = img.closest(".stage__layer");
+			if (!layer) return;
+			const sizes = stageSizes(layer.dataset.photo);
+			img.sizes = sizes;
+			const source = img.closest("picture")?.querySelector("source");
+			if (source) source.sizes = sizes;
+		});
+
+		if (lightbox?.open && photos[lightboxIndex]) {
+			const sizes = lightboxSizes(photos[lightboxIndex].slug);
+			if (lightboxPictureSource) lightboxPictureSource.sizes = sizes;
+			if (lightboxImg) lightboxImg.sizes = sizes;
+		}
+	}
+
+	let renditionRefreshTimer = 0;
+	const scheduleRenditionRefresh = () => {
+		window.clearTimeout(renditionRefreshTimer);
+		renditionRefreshTimer = window.setTimeout(refreshRenditionSizes, 140);
+	};
+
+	window.addEventListener("resize", scheduleRenditionRefresh);
+	window.addEventListener("orientationchange", scheduleRenditionRefresh);
 
 	/* ---------------------------------------------------------------------- */
 	/* Boot                                                                   */

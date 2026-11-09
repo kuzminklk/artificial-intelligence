@@ -5,6 +5,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -29,6 +33,34 @@
           "file": "01-birch-1800.webp",
           "bytes": 266678
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "01-birch-2400.jpg",
+          "bytes": 664457
+        },
+        "webp": {
+          "file": "01-birch-2400.webp",
+          "bytes": 379004
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "01-birch-3600.webp",
+          "bytes": 663912
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "01-birch-full.webp",
+          "bytes": 1123998
+        }
       }
     },
     "lqip": {
@@ -45,6 +77,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -69,6 +105,34 @@
           "file": "02-birch-side-1800.webp",
           "bytes": 268162
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "02-birch-side-2400.jpg",
+          "bytes": 665525
+        },
+        "webp": {
+          "file": "02-birch-side-2400.webp",
+          "bytes": 381264
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "02-birch-side-3600.webp",
+          "bytes": 670744
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "02-birch-side-full.webp",
+          "bytes": 1105234
+        }
       }
     },
     "lqip": {
@@ -85,6 +149,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -109,6 +177,34 @@
           "file": "03-canopy-1800.webp",
           "bytes": 273458
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "03-canopy-2400.jpg",
+          "bytes": 671664
+        },
+        "webp": {
+          "file": "03-canopy-2400.webp",
+          "bytes": 391940
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "03-canopy-3600.webp",
+          "bytes": 690300
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "03-canopy-full.webp",
+          "bytes": 1122106
+        }
       }
     },
     "lqip": {
@@ -125,6 +221,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -149,6 +249,34 @@
           "file": "04-away-1800.webp",
           "bytes": 277992
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "04-away-2400.jpg",
+          "bytes": 673627
+        },
+        "webp": {
+          "file": "04-away-2400.webp",
+          "bytes": 400778
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "04-away-3600.webp",
+          "bytes": 700866
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "04-away-full.webp",
+          "bytes": 1103602
+        }
       }
     },
     "lqip": {
@@ -165,6 +293,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -189,6 +321,34 @@
           "file": "05-path-back-1800.webp",
           "bytes": 291580
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "05-path-back-2400.jpg",
+          "bytes": 705381
+        },
+        "webp": {
+          "file": "05-path-back-2400.webp",
+          "bytes": 430524
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "05-path-back-3600.webp",
+          "bytes": 763736
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "05-path-back-full.webp",
+          "bytes": 1212180
+        }
       }
     },
     "lqip": {
@@ -205,6 +365,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -229,6 +393,34 @@
           "file": "06-turning-1800.webp",
           "bytes": 176148
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "06-turning-2400.jpg",
+          "bytes": 500720
+        },
+        "webp": {
+          "file": "06-turning-2400.webp",
+          "bytes": 255674
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "06-turning-3600.webp",
+          "bytes": 457114
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "06-turning-full.webp",
+          "bytes": 791660
+        }
       }
     },
     "lqip": {
@@ -245,6 +437,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -269,6 +465,34 @@
           "file": "07-portrait-1800.webp",
           "bytes": 162794
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "07-portrait-2400.jpg",
+          "bytes": 472677
+        },
+        "webp": {
+          "file": "07-portrait-2400.webp",
+          "bytes": 236234
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "07-portrait-3600.webp",
+          "bytes": 414364
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "07-portrait-full.webp",
+          "bytes": 722144
+        }
       }
     },
     "lqip": {
@@ -285,6 +509,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -309,6 +537,34 @@
           "file": "08-bending-1800.webp",
           "bytes": 125758
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "08-bending-2400.jpg",
+          "bytes": 408171
+        },
+        "webp": {
+          "file": "08-bending-2400.webp",
+          "bytes": 176858
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "08-bending-3600.webp",
+          "bytes": 315538
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "08-bending-full.webp",
+          "bytes": 583020
+        }
       }
     },
     "lqip": {
@@ -325,6 +581,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -349,6 +609,34 @@
           "file": "09-fern-path-1800.webp",
           "bytes": 231838
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "09-fern-path-2400.jpg",
+          "bytes": 597339
+        },
+        "webp": {
+          "file": "09-fern-path-2400.webp",
+          "bytes": 330404
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "09-fern-path-3600.webp",
+          "bytes": 558514
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "09-fern-path-full.webp",
+          "bytes": 961714
+        }
       }
     },
     "lqip": {
@@ -365,6 +653,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -389,6 +681,34 @@
           "file": "10-walking-1800.webp",
           "bytes": 221388
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "10-walking-2400.jpg",
+          "bytes": 579900
+        },
+        "webp": {
+          "file": "10-walking-2400.webp",
+          "bytes": 318070
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "10-walking-3600.webp",
+          "bytes": 538166
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "10-walking-full.webp",
+          "bytes": 897714
+        }
       }
     },
     "lqip": {
@@ -405,6 +725,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -429,6 +753,34 @@
           "file": "11-clearing-1800.webp",
           "bytes": 207072
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "11-clearing-2400.jpg",
+          "bytes": 556859
+        },
+        "webp": {
+          "file": "11-clearing-2400.webp",
+          "bytes": 296716
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "11-clearing-3600.webp",
+          "bytes": 505922
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "11-clearing-full.webp",
+          "bytes": 858246
+        }
       }
     },
     "lqip": {
@@ -445,6 +797,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -469,6 +825,34 @@
           "file": "12-fallen-log-1800.webp",
           "bytes": 321736
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "12-fallen-log-2400.jpg",
+          "bytes": 741659
+        },
+        "webp": {
+          "file": "12-fallen-log-2400.webp",
+          "bytes": 484332
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "12-fallen-log-3600.webp",
+          "bytes": 866008
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "12-fallen-log-full.webp",
+          "bytes": 1324356
+        }
       }
     },
     "lqip": {
@@ -485,6 +869,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -509,6 +897,34 @@
           "file": "13-pines-1800.webp",
           "bytes": 253336
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "13-pines-2400.jpg",
+          "bytes": 632086
+        },
+        "webp": {
+          "file": "13-pines-2400.webp",
+          "bytes": 378026
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "13-pines-3600.webp",
+          "bytes": 773360
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "13-pines-full.webp",
+          "bytes": 1382184
+        }
       }
     },
     "lqip": {
@@ -525,6 +941,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -549,6 +969,34 @@
           "file": "14-pine-path-1800.webp",
           "bytes": 273182
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "14-pine-path-2400.jpg",
+          "bytes": 658572
+        },
+        "webp": {
+          "file": "14-pine-path-2400.webp",
+          "bytes": 401490
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "14-pine-path-3600.webp",
+          "bytes": 770620
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "14-pine-path-full.webp",
+          "bytes": 1387756
+        }
       }
     },
     "lqip": {
@@ -565,6 +1013,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -589,6 +1041,34 @@
           "file": "15-dream-1800.webp",
           "bytes": 263830
         }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "15-dream-2400.jpg",
+          "bytes": 652331
+        },
+        "webp": {
+          "file": "15-dream-2400.webp",
+          "bytes": 394794
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "15-dream-3600.webp",
+          "bytes": 750166
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "15-dream-full.webp",
+          "bytes": 1365384
+        }
       }
     },
     "lqip": {
@@ -605,6 +1085,10 @@
     "width": 5472,
     "height": 3648,
     "ratio": 1.5,
+    "original": {
+      "width": 5472,
+      "height": 3648
+    },
     "sizes": {
       "w900": {
         "width": 900,
@@ -629,6 +1113,34 @@
           "file": "16-dream-face-1800.webp",
           "bytes": 174442
         }
+      },
+      "w2400": {
+        "width": 2400,
+        "height": 1600,
+        "jpg": {
+          "file": "16-dream-face-2400.jpg",
+          "bytes": 509317
+        },
+        "webp": {
+          "file": "16-dream-face-2400.webp",
+          "bytes": 260642
+        }
+      },
+      "w3600": {
+        "width": 3600,
+        "height": 2400,
+        "webp": {
+          "file": "16-dream-face-3600.webp",
+          "bytes": 572284
+        }
+      },
+      "full": {
+        "width": 5472,
+        "height": 3648,
+        "webp": {
+          "file": "16-dream-face-full.webp",
+          "bytes": 1215240
+        }
       }
     },
     "lqip": {
@@ -645,6 +1157,10 @@
     "width": 3648,
     "height": 5472,
     "ratio": 0.6667,
+    "original": {
+      "width": 3648,
+      "height": 5472
+    },
     "sizes": {
       "w900": {
         "width": 600,
@@ -668,6 +1184,34 @@
         "webp": {
           "file": "17-overhead-1800.webp",
           "bytes": 168896
+        }
+      },
+      "w2400": {
+        "width": 1600,
+        "height": 2400,
+        "jpg": {
+          "file": "17-overhead-2400.jpg",
+          "bytes": 489345
+        },
+        "webp": {
+          "file": "17-overhead-2400.webp",
+          "bytes": 247080
+        }
+      },
+      "w3600": {
+        "width": 2400,
+        "height": 3600,
+        "webp": {
+          "file": "17-overhead-3600.webp",
+          "bytes": 534974
+        }
+      },
+      "full": {
+        "width": 3648,
+        "height": 5472,
+        "webp": {
+          "file": "17-overhead-full.webp",
+          "bytes": 1136596
         }
       }
     },
