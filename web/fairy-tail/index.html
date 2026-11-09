@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="theme-color" content="#060a07" />
+		<meta name="color-scheme" content="dark" />
+		<meta
+			name="description"
+			content="«Ясна» — фотоистория в десяти главах: девочка входит в летний лес, и лес рассказывает ей сказку. Стихи и семнадцать кадров на весь экран."
+		/>
+		<meta property="og:title" content="Ясна — лесная сказка в стихах" />
+		<meta
+			property="og:description"
+			content="Девочка вошла в летний лес — и лес узнал её. Фотоистория о свете, корнях и сказке, которую нельзя унести, но можно сохранить."
+		/>
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:image" content="assets/og-cover.jpg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Обложка «Ясны»: девочка в летнем лесу смотрит вверх" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="assets/og-cover.jpg" />
+		<title>Ясна — лесная сказка в стихах</title>
+
+		<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+		<!-- Local Cyrillic typefaces: Cormorant Garamond for the verse, Manrope for labels -->
+		<link rel="preload" href="fonts/cormorant-garamond-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="fonts/cormorant-garamond-italic-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+
+		<!-- The cover photograph is the first thing a visitor should see -->
+		<link
+			rel="preload"
+			as="image"
+			href="assets/photos/13-pines-1800.webp"
+			imagesrcset="assets/photos/13-pines-900.webp 900w, assets/photos/13-pines-1800.webp 1800w"
+			imagesizes="100vw"
+			type="image/webp"
+			fetchpriority="high"
+		/>
+
+		<link rel="stylesheet" href="style.css" />
+		<script>
+			// Progressive enhancement flag: reveal animations are only active with JS.
+			document.documentElement.classList.add("js");
+		</script>
+	</head>
+
+	<body>
+		<a class="skip-link" href="#story">Перейти к сказке</a>
+
+		<!-- Reading progress -->
+		<div class="scroll-progress" aria-hidden="true"><span data-progress></span></div>
+
+		<!-- =================================================================
+		     FIXED PHOTO STAGE
+		     One layer per story section. The tiny inline JPEGs are LQIP
+		     placeholders; script.js injects the full responsive <picture>
+		     when the reader approaches the chapter.
+		     ================================================================= -->
+		<div class="stage" aria-hidden="true">
+			<div
+				class="stage__layer"
+				data-layer="cover"
+				data-photo="13-pines"
+				style="--pos: 42% 38%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAMEBQIB/8QAJBAAAgICAQQCAwEAAAAAAAAAAQIAAwQREgUhMUETIjJxgZH/xAAXAQADAQAAAAAAAAAAAAAAAAAAAQID/8QAGhEBAQADAQEAAAAAAAAAAAAAAAECEiERQf/aAAwDAQACEQMRAD8A86FjVrmY9bEFuLFhve5X60tK9UNWOPqGHYHQB1MjGzLqMlXRyHXffc4uve1/kLkty2f7HsnVc63Q9VlPynZK77HZAiQ35Dk1O33KjWj71EXKfRsMFx8Z3K9mKzZig9vE3K8ULap39dakGdTxzKuA/L2P3M5krxn30tW4BPb1E0GxLWHF9BQfO4hMoE9TF2BJ9+J3eoS7kPJP+REhp8Q2Ox5dz2MREKVf/9k=')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="prologue"
+				data-photo="03-canopy"
+				style="--pos: 50% 30%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAMEBQIB/8QAJxAAAgIBAwIGAwEAAAAAAAAAAQIAAwQREjEFIRQiMkFhsROBoeH/xAAYAQEBAAMAAAAAAAAAAAAAAAABAgADBP/EABwRAAICAgMAAAAAAAAAAAAAAAABAhEDIRIxQf/aAAwDAQACEQMRAD8A46rbh2Vsa3WyxyO2nE8wsWptpOhY+3+zMpwr9W3qQdeJr4P5a99T0+VRuDk86Tg4qqTGrK2cBRYp2AE8RIs52yUXyOvc6A8RMUFWwOnybXv3+g68CMbqF13VvDbvL6Brx8yktbltd37kaK3jGsB7g/c2Y4RFOjfyMOytkIIAI7Gsg/cTJS56wdzOP7EKY6I67G95d6ZWlvV61dRoawSPmIlL0lGn1nGqTEWxUAY9oiJEeimf/9k=')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="birch"
+				data-photo="01-birch"
+				style="--pos: 50% 20%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGQAAAwEBAQAAAAAAAAAAAAAAAAMFBgEC/8QAJRAAAgICAgEDBQEAAAAAAAAAAQIAAwQREiEFMUFRExUjMkJx/8QAFwEBAQEBAAAAAAAAAAAAAAAAAwEABP/EABsRAQEAAgMBAAAAAAAAAAAAAAABAhESMTJC/9oADAMBAAIRAxEAPwCEw2wDDsRnAlQVOo40PYQE69tmdSsNbZQtqEI37E6nJrayFhyx99cQASISgKKBWqm3v12IQ7lqsdlmqo8lp47PTbkjxOFkPzsrBY8jLGXm0vgX77bhtT8GL8NmDFw1qUfktPJjGx81e3jIwLnQMdhuxrXYhNGuRXYoJTXv2IQ+S8WNzEH2n6n9M2j/AJuP8NpsmgEA6Q6hCL8JO2if1B+RCEIEI//Z')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="path"
+				data-photo="09-fern-path"
+				style="--pos: 50% 26%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGQABAQADAQAAAAAAAAAAAAAAAAUDBAYC/8QAIxAAAgEDBAMAAwAAAAAAAAAAAQIDAAQRBRIhMRNBcSNRYf/EABgBAAMBAQAAAAAAAAAAAAAAAAABAwIF/8QAGhEAAwADAQAAAAAAAAAAAAAAAAECAxEhMf/aAAwDAQACEQMRAD8Api2hsY2dUXcBhdnGam6+BJaRPjcXPOOdte7eZmijjnJPHY7UezWpeyxRpLB5w8inCrjj7XOiOj9J8Fy8cZ3s+eh8pWMOlwrCSQq3o44pVHKEXUNsQwkl2OFxvQ4yPlczJGx1HEZY+lJ/VWNOtGklPnLRhenIyKy3em7dTtgHSfepAI44/tbnU7HomPp8sQ/MQppV6bTISc3EnjQdANmlTeZING67YZowFC59CuRvZXhvGMbEFGOKUrcejZv6LM93OVnO/Ps90pSoZuVwEf/Z')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="dance"
+				data-photo="04-away"
+				style="--pos: 50% 28%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGgABAAIDAQAAAAAAAAAAAAAAAAIDBAUGAf/EACQQAAICAgAGAwEBAAAAAAAAAAECAAMEERITITFBUQUiI4Gh/8QAGAEBAAMBAAAAAAAAAAAAAAAAAgABAwT/xAAcEQEBAAICAwAAAAAAAAAAAAABAAIRITESMmH/2gAMAwEAAhEDEQA/AK0y8EYwVjy+E74Qd7msoFd2S5ZfqTvQEqOFkuxFhHH63Nx8Rjch0ryFUpceEmcQYnA1huhZV+X562N9PMSGaeXYKqGFgBOyTqITGqwWe2+wuxAYHwe0sw/kuXljHbZIt2HJ7dJi0ppg/wDde5TYjVZCWHuzbm2GJ1Idc3SWY2Meoya9sTsMOkTR21u33AO/PqIfH7RaKkhwoPSe5XbFbzxn/IiLH2I3VpVWoUBBogE9O8REwe53/9k=')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="turn"
+				data-photo="06-turning"
+				style="--pos: 50% 26%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAMEBQYC/8QAKBAAAgEEAQIEBwAAAAAAAAAAAQIDAAQRIRIxQQUUIlETIzJxkaHB/8QAGAEBAAMBAAAAAAAAAAAAAAAAAQIDBQT/xAAcEQACAgIDAAAAAAAAAAAAAAAAAQIREiETMWH/2gAMAwEAAhEDEQA/AKSIs7/MJbXvuob21428bRgsi5ywGhVyGBIlZvVjoG715tk8zLKiy4LggDPbHtXFBbGKshtZFjhBX6uNKjiYpFwLYPQrilOGwN1rYeUBLJnWx3rDl5xeKcoRxYEDQ/daMMs9xgJGXI3ofyq1+t5byMZI2QHocdvvVsI0yVlOUAzMWYlSx2KUkHEZ3g7pUqA7W2s7e3USxRKrgZBqORmuZblJCeKD0gdqUrOm3xX6K7OUz8RVLbJYg/mlKVosD//Z')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="log"
+				data-photo="12-fallen-log"
+				style="--pos: 50% 26%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGQABAAIDAAAAAAAAAAAAAAAAAAIGAwQF/8QAJhAAAgEEAQIGAwAAAAAAAAAAAQIDAAQRITEFEhMUIkFCcSNRgf/EABYBAQEBAAAAAAAAAAAAAAAAAAIAA//EABwRAQEBAAEFAAAAAAAAAAAAAAABEUECEjFRYf/aAAwDAQACEQMRAD8ArAZzGe4nFZ4rIS2Zk7/yKdJjkfdO1WlZMej4HG63LGY23VI4X2mcsCPbG6wt9FJOXKETBsoMH3xSrJcGxtnLRKH7t45xSj3fFjUv4LdLuOFo2hCbduT/AAVkkW3NxF4XjyvJoegDWeKXK3dx1EyJH3yFssMaxTqRNpGrLkSk5JB4+qWzpyJC8t2tS8TDLfsb1SoxX8TQ5ZmaXOcN8vulDKlnuVRZFUIoBYDj2rl9dtovJsQu0OqUoTyfCpuxV9GlKVuzf//Z')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="pines"
+				data-photo="14-pine-path"
+				style="--pos: 50% 30%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAQCAwX/xAAlEAACAgIBAgYDAAAAAAAAAAABAgADBBEhBRITIjFBUaEUQoH/xAAXAQADAQAAAAAAAAAAAAAAAAAAAQID/8QAGREBAQADAQAAAAAAAAAAAAAAAAECERJB/9oADAMBAAIRAxEAPwBrpnTK8tslbjvhSGA1MsDeaqIQ/hcKAN+8owOuXYwyAPN4i638GLY2ddVmC1COPuPqJ0h1CnXULBYO1u7ZGtQluRkLZm2WWjuZ+QR8wkmRRGR2Ugke4lZdkyEC8A8GbWNjMbLAw9PuJ5mEacithssWOv5MpnLdVRax2awrrRHEI3+O2RYH7CmhtiYQ7kONTHYs42feQylFt4Zv0Pl1xqEJjFeIPYzEBtEa9IQhAq//2Q==')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="sleep"
+				data-photo="15-dream"
+				style="--pos: 50% 22%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAMEBQEC/8QAJBAAAgEEAQQCAwAAAAAAAAAAAQIDAAQREiEFEzFBUWEUIoH/xAAXAQEBAQEAAAAAAAAAAAAAAAADAQIE/8QAGhEBAQEAAwEAAAAAAAAAAAAAAAECEiExEf/aAAwDAQACEQMRAD8AyIkV0KunHoVzTaTtwxO+OAAKmUxCQF5guPC/VaUVwem2hvSEZWbUKRzj5zXNJaTOemBMFJ1dNW8EeMUqe6zeAzvrs3oUq+M2fF+y6JZzs6y3Z7w8kMOP5SXoMzOIIL2NoyeVZsEfeKwkDq4ZNkb5IxmvN1c3D3Ct3CHAxkcUvGxeWVqUfgXMkO4k1bGw8GlRISYgGGc85PqlHWeqry3Usr5ds1y3/d2LehxSlNvxmJldjNqTkGlKUNV//9k=')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="wake"
+				data-photo="10-walking"
+				style="--pos: 50% 26%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAkABgDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAUCBAYBA//EACgQAAIBAwIEBgMAAAAAAAAAAAECAwAEERIxBRMhIhRBUWFxgSMyof/EABgBAAMBAQAAAAAAAAAAAAAAAAABAwIE/8QAHhEAAgICAgMAAAAAAAAAAAAAAAECERIxAwQhQVH/2gAMAwEAAhEDEQA/APYXXZPLpaXA7Vxt9UpMJeFpUcxzLknHQEelW4S0TKc6e3JL7H2pdLdpc3c7xDl6f1wfXeuCMfg9lZA8MvMZenzvRUUlQMwmBYHpnO1FUcb2Icw8UUO0YiDo2ynb+0nNs/jpA2lA41dNq0VhwyO0R2utLrvpPl91OB+F+LLwqM4x1OBWc1G6Q6EMvDhBEHaTUrDpj1orRS3cc8xXTG8YIBAHaPeipT7GDpoKLfJQ27AjOehzWS4xapaP+IsPk0UVTh2x+jtncyGxkUnbz86KKKrXkD//2Q==')"
+			></div>
+			<div
+				class="stage__layer"
+				data-layer="finale"
+				data-photo="16-dream-face"
+				style="--pos: 50% 50%; --lqip: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAQABgDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAMCBAX/xAAfEAACAgICAwEAAAAAAAAAAAABAgMRAAQSIQUxUUH/xAAXAQADAQAAAAAAAAAAAAAAAAABAgME/8QAGBEAAwEBAAAAAAAAAAAAAAAAAAEREiH/2gAMAwEAAhEDEQA/AM5Ed2uFQWHpck42IiOaMpJ+VWIjimjmvXm4r9vs4N5SUs0W1sMyE9kd5nSpTPKOecmxdqMMqkDZIh02d/2lU3hgjFh//9k=')"
+			></div>
+
+			<div class="stage__veil"></div>
+			<div class="stage__grain"></div>
+		</div>
+
+		<!-- =================================================================
+		     HEADER: brand, current chapter, counter, chapter index trigger
+		     ================================================================= -->
+		<header class="site-header">
+			<a class="brand" href="#cover" aria-label="Ясна — к началу сказки">
+				<span class="brand__name">Ясна</span>
+				<span class="brand__note">лесная сказка</span>
+			</a>
+
+			<p class="header-chapter">
+				<span class="header-chapter__numeral" data-chapter-numeral>Пролог</span>
+				<span class="header-chapter__title" data-chapter-title>На опушке</span>
+			</p>
+
+			<div class="header-actions">
+				<span class="header-counter" data-counter>—</span>
+				<button
+					class="menu-btn"
+					type="button"
+					data-open-chapters
+					aria-haspopup="dialog"
+					aria-controls="chapters"
+				>
+					<span>Главы</span>
+					<span class="menu-btn__icon" aria-hidden="true">＋</span>
+				</button>
+			</div>
+		</header>
+
+		<!-- Chapter rail is generated by script.js from the story sections -->
+		<nav class="chapter-rail" data-rail aria-label="Главы сказки"></nav>
+
+		<main id="story">
+			<!-- =============================================================
+			     COVER
+			     ============================================================= -->
+			<section
+				class="cover"
+				id="cover"
+				data-scene
+				data-layer="cover"
+				data-chapter="Пролог"
+				data-title="На опушке"
+			>
+				<div class="cover__inner">
+					<p class="eyebrow"><span class="eyebrow__dot" aria-hidden="true"></span>фотоистория · стихи</p>
+
+					<h1 class="cover__title">Ясна<span class="cover__title-dot" aria-hidden="true">.</span></h1>
+
+					<p class="cover__sub">лесная сказка в стихах</p>
+
+					<p class="cover__intro">
+						Девочка вошла в летний лес — и лес узнал её. Фотоистория в десяти главах о свете, корнях и сказке,
+						которую нельзя унести, но можно сохранить.
+					</p>
+
+					<a class="cover__start" href="#prologue">
+						<span>Войти в лес</span>
+						<span class="cover__start-arrow" aria-hidden="true">↓</span>
+					</a>
+
+					<p class="cover__meta">
+						<span>лето · 2026</span>
+						<span>10 глав</span>
+						<span>17 кадров</span>
+					</p>
+				</div>
+
+				<p class="cover__hint" aria-hidden="true">листайте вниз</p>
+			</section>
+
+			<!-- =============================================================
+			     STORY CHAPTERS
+			     Each <section> names its stage layer in data-layer and holds
+			     one poem in front of that full-screen photograph.
+			     ============================================================= -->
+
+			<!-- Зачин -->
+			<section
+				class="scene"
+				id="prologue"
+				data-scene
+				data-layer="prologue"
+				data-chapter="Зачин"
+				data-title="За околицей"
+				aria-labelledby="prologue-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Зачин</span>
+							<h2 class="scene__title" id="prologue-title">За околицей</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">В тени стоит родимый дом,</span>
+							<span class="line">И пахнет утренним теплом.</span>
+							<span class="line">Стоит берёза у крыльца,</span>
+							<span class="line">И смотрит в лес, где нет конца.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Ей мать твердила: «В лес одна</span>
+							<span class="line">Не уходи, там тишина.</span>
+							<span class="line">За той тропинкой бурелом</span>
+							<span class="line">Лежит и пахнет мхом и сном».</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Тропинка вьётся меж кустов,</span>
+							<span class="line">В зелёный сумрак, в тихий зов.</span>
+							<span class="line">Ясна косичку заплела,</span>
+							<span class="line">И утром в лес одна ушла.</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 03</span> свет сквозь листву</p>
+					<p class="sr-only">
+						Фотография: девушка с длинными золотистыми волосами поднимает лицо к зелёным кронам и солнечному свету.
+					</p>
+				</div>
+			</section>
+
+			<!-- I. Берёза -->
+			<section
+				class="scene"
+				id="chapter-1"
+				data-scene
+				data-layer="birch"
+				data-chapter="I"
+				data-title="Берёза"
+				aria-labelledby="chapter-1-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Глава I</span>
+							<h2 class="scene__title" id="chapter-1-title">Берёза</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">Берёза белая стоит,</span>
+							<span class="line">Листвой-ладонями шумит.</span>
+							<span class="line">К ней Ясна идёт, светла,</span>
+							<span class="line">И шепчет: «Здравствуй, я пришла».</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Ладонь на белый ствол легла —</span>
+							<span class="line">И сказка в путь её звала.</span>
+							<span class="line">Трава по пояс, пахнет мхом,</span>
+							<span class="line">И солнце ходит босиком.</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 01</span> берёза · утро</p>
+					<p class="sr-only">
+						Фотография: девушка в высокой траве касается белого ствола берёзы на опушке леса.
+					</p>
+				</div>
+			</section>
+
+			<!-- II. Тропа -->
+			<section
+				class="scene"
+				id="chapter-2"
+				data-scene
+				data-layer="path"
+				data-chapter="II"
+				data-title="Тропа"
+				aria-labelledby="chapter-2-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Глава II</span>
+							<h2 class="scene__title" id="chapter-2-title">Тропа</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">Тропа уходит в глушь и мрак,</span>
+							<span class="line">Где папоротник, где овраг.</span>
+							<span class="line">Сквозь зелень тянутся лучи</span>
+							<span class="line">И светят прямо на пути.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Село осталось позади,</span>
+							<span class="line">И только лес шумит в груди.</span>
+							<span class="line">Она идёт, не зная бед,</span>
+							<span class="line">А лес идёт за ней вослед.</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 09</span> папоротники · тропа</p>
+					<p class="sr-only">
+						Фотография: девушка идёт по лесной тропинке среди папоротников и поваленных стволов.
+					</p>
+				</div>
+			</section>
+
+			<!-- III. Хоровод -->
+			<section
+				class="scene"
+				id="chapter-3"
+				data-scene
+				data-layer="dance"
+				data-chapter="III"
+				data-title="Хоровод"
+				aria-labelledby="chapter-3-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Глава III</span>
+							<h2 class="scene__title" id="chapter-3-title">Хоровод</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">Раскрылся лес, как светлый зал,</span>
+							<span class="line">Как будто кто-то пир созвал.</span>
+							<span class="line">И свет зелёный льётся ввысь,</span>
+							<span class="line">Где песни птиц переплелись.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Она танцует, и с ней свет,</span>
+							<span class="line">И полдень кружится в ответ.</span>
+							<span class="line">Её ладони — две зари,</span>
+							<span class="line">Коса — как речка янтаря.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Он узнаёт её шаги,</span>
+							<span class="line">И шепчет: «Радуйся, живи».</span>
+							<span class="line">Она — своя, и лес поёт,</span>
+							<span class="line">И в сердце свет её растёт.</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 04</span> шаг вглубь</p>
+					<p class="sr-only">
+						Фотография: девушка уходит в лес, раскинув руки, — вид со спины, солнечные пятна на траве.
+					</p>
+				</div>
+			</section>
+
+			<!-- IV. Оглянулась -->
+			<section
+				class="scene"
+				id="chapter-4"
+				data-scene
+				data-layer="turn"
+				data-chapter="IV"
+				data-title="Оглянулась"
+				aria-labelledby="chapter-4-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Глава IV</span>
+							<h2 class="scene__title" id="chapter-4-title">Оглянулась</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">Она оглянулась назад —</span>
+							<span class="line">За ней деревья встали в ряд.</span>
+							<span class="line">Тропа исчезла, как во сне,</span>
+							<span class="line">И лес сомкнулся в вышине.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">«Кто ты?» — спросила. В тишине</span>
+							<span class="line">Лишь свет качался на сосне.</span>
+							<span class="line">Она поняла: это — лес,</span>
+							<span class="line">И он — начало всех чудес.</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 06</span> обернулась</p>
+					<p class="sr-only">
+						Фотография: девушка оборачивается к камере, её волосы подсвечены зелёным лесным светом.
+					</p>
+				</div>
+			</section>
+
+			<!-- V. Пень -->
+			<section
+				class="scene"
+				id="chapter-5"
+				data-scene
+				data-layer="log"
+				data-chapter="V"
+				data-title="Пень"
+				aria-labelledby="chapter-5-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Глава V</span>
+							<h2 class="scene__title" id="chapter-5-title">Пень</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">Упавший ствол в тени лежит,</span>
+							<span class="line">Она садится. Лес молчит.</span>
+							<span class="line">Ствол — будто тёплое плечо,</span>
+							<span class="line">И ей легко, и горячо.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">«Я помню всех, — шумит сосна. —</span>
+							<span class="line">В моих корнях — их имена.</span>
+							<span class="line">Ты не потерялась. Ты — дочь.</span>
+							<span class="line">Я здесь, и я могу помочь».</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 12</span> поваленный ствол</p>
+					<p class="sr-only">
+						Фотография: девушка сидит на большом поваленном стволе сосны в солнечном лесу, опустив глаза.
+					</p>
+				</div>
+			</section>
+
+			<!-- VI. Сосны -->
+			<section
+				class="scene"
+				id="chapter-6"
+				data-scene
+				data-layer="pines"
+				data-chapter="VI"
+				data-title="Сосны"
+				aria-labelledby="chapter-6-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Глава VI</span>
+							<h2 class="scene__title" id="chapter-6-title">Сосны</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">Ещё глубже, где сосны в ряд,</span>
+							<span class="line">Где смолы тёмные блестят.</span>
+							<span class="line">И тишина, как море, спит,</span>
+							<span class="line">И только сердце в ней стучит.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Она мала в такой глуши,</span>
+							<span class="line">Но не одна в лесной тиши.</span>
+							<span class="line">Она услышит, как живёт</span>
+							<span class="line">Большое сердце. Лес поёт.</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 14</span> сосновая тропа</p>
+					<p class="sr-only">
+						Фотография: девушка идёт по тропе между высокими соснами, держа обувь в руке.
+					</p>
+				</div>
+			</section>
+
+			<!-- VII. Сон -->
+			<section
+				class="scene"
+				id="chapter-7"
+				data-scene
+				data-layer="sleep"
+				data-chapter="VII"
+				data-title="Сон"
+				aria-labelledby="chapter-7-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Глава VII</span>
+							<h2 class="scene__title" id="chapter-7-title">Сон</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">Ложится в травы, в долгий сон,</span>
+							<span class="line">И лес роняет тихий звон.</span>
+							<span class="line">Ромашки падают в лицо,</span>
+							<span class="line">И лес смыкается в кольцо.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Ей снится: корни, как мосты,</span>
+							<span class="line">Уходят в звёздные сады.</span>
+							<span class="line">И песня долгая слышна,</span>
+							<span class="line">Как будто в ней сама весна.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">И время тает, как смола,</span>
+							<span class="line">Стекает в тёмные дупла.</span>
+							<span class="line">Лес напевает ей о том,</span>
+							<span class="line">Что дома ждут её с теплом.</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 15</span> трава · сон</p>
+					<p class="sr-only">
+						Фотография: девушка лежит в высокой траве с закрытыми глазами, руки сложены на груди.
+					</p>
+				</div>
+			</section>
+
+			<!-- VIII. Пробуждение -->
+			<section
+				class="scene"
+				id="chapter-8"
+				data-scene
+				data-layer="wake"
+				data-chapter="VIII"
+				data-title="Пробуждение"
+				aria-labelledby="chapter-8-title"
+			>
+				<div class="scene__inner">
+					<div class="scene__copy">
+						<header class="scene__head">
+							<span class="scene__numeral" aria-hidden="true">Глава VIII</span>
+							<h2 class="scene__title" id="chapter-8-title">Пробуждение</h2>
+						</header>
+
+						<div class="poem">
+						<p class="stanza">
+							<span class="line">Она проснулась. Красный свет</span>
+							<span class="line">Лежит на листьях, как ответ.</span>
+							<span class="line">Тропа вернулась, и с утра</span>
+							<span class="line">Идти домой уже пора.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">Лес отпускает, но даёт</span>
+							<span class="line">Ей дар, который не возьмёт</span>
+							<span class="line">Никто. В её груди живёт</span>
+							<span class="line">Лес, и домой она идёт.</span>
+						</p>
+						<p class="stanza">
+							<span class="line">«Где ты была?» — спросила мать.</span>
+							<span class="line">«Я в сказке», — нечего сказать.</span>
+							<span class="line">И сказка ждёт, кто в лес придёт</span>
+							<span class="line">С открытым сердцем — и поймёт.</span>
+						</p>
+					</div>
+					</div>
+
+					<p class="scene__caption" aria-hidden="true"><span>кадр 10</span> обратная тропа</p>
+					<p class="sr-only">
+						Фотография: девушка уходит по лесной тропе вглубь зелёного света.
+					</p>
+				</div>
+			</section>
+
+			<!-- =============================================================
+			     FINALE
+			     ============================================================= -->
+			<section
+				class="finale"
+				id="finale"
+				data-scene
+				data-layer="finale"
+				data-chapter="Эпилог"
+				data-title="Сказка не кончается"
+				aria-labelledby="finale-title"
+			>
+				<div class="finale__inner">
+					<header class="scene__head">
+						<span class="scene__numeral" aria-hidden="true">Эпилог</span>
+					</header>
+
+					<div class="poem">
+						<p class="stanza">
+							<span class="line">С тех пор прошло немало лет,</span>
+							<span class="line">Но лес не кончился — он ждёт.</span>
+							<span class="line">И тот, кто входит в зелёный свет,</span>
+							<span class="line">Свою там сказку найдёт.</span>
+						</p>
+					</div>
+
+					<h2 class="finale__title" id="finale-title">Сказка <em>не кончается</em>.</h2>
+
+					<p class="finale__note">Ясна · лесная сказка · 17 кадров</p>
+
+					<a class="finale__back" href="#frames">
+						<span>смотреть кадры</span>
+						<span aria-hidden="true">↓</span>
+					</a>
+				</div>
+			</section>
+
+			<!-- =============================================================
+			     CODA: every photograph as a horizontal filmstrip
+			     Built by script.js from the photo metadata array.
+			     ============================================================= -->
+			<section class="frames" id="frames" aria-labelledby="frames-title">
+				<div class="frames__head">
+					<div>
+						<h2 class="frames__title" id="frames-title">Кадры</h2>
+						<p class="frames__sub">
+							Семнадцать фотографий, из которых сложилась сказка. Листайте ленту или откройте любой кадр.
+						</p>
+					</div>
+
+					<div class="frames__controls">
+						<button class="frames__btn" type="button" data-frames-prev aria-label="Предыдущие кадры">←</button>
+						<button class="frames__btn" type="button" data-frames-next aria-label="Следующие кадры">→</button>
+					</div>
+				</div>
+
+				<div class="frames__track" data-frames-track></div>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<div class="footer__inner">
+				<div>
+					<p class="footer__brand">Ясна</p>
+					<p class="footer__quote">«Лес не кончается — кончается дорога»</p>
+					<p class="footer__meta">
+						Фотоистория в десяти главах. Стихи, лес и семнадцать кадров.<br />
+						Лето · 2026
+					</p>
+				</div>
+
+				<a class="footer__top" href="#cover">Наверх <span aria-hidden="true">↑</span></a>
+			</div>
+		</footer>
+
+		<!-- =================================================================
+		     CHAPTER INDEX
+		     ================================================================= -->
+		<dialog class="chapters" id="chapters" aria-labelledby="chapters-title">
+			<div class="chapters__inner">
+				<div class="chapters__top">
+					<h2 class="chapters__title" id="chapters-title">Главы сказки</h2>
+					<button class="dialog-close" type="button" data-close-chapters aria-label="Закрыть оглавление">
+						✕
+					</button>
+				</div>
+
+				<ol class="chapters__list">
+					<li class="chapters__item">
+						<a class="chapters__link" href="#prologue">
+							<span class="chapters__num">Зачин</span>
+							<span class="chapters__name">За околицей</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#chapter-1">
+							<span class="chapters__num">I</span>
+							<span class="chapters__name">Берёза</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#chapter-2">
+							<span class="chapters__num">II</span>
+							<span class="chapters__name">Тропа</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#chapter-3">
+							<span class="chapters__num">III</span>
+							<span class="chapters__name">Хоровод</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#chapter-4">
+							<span class="chapters__num">IV</span>
+							<span class="chapters__name">Оглянулась</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#chapter-5">
+							<span class="chapters__num">V</span>
+							<span class="chapters__name">Пень</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#chapter-6">
+							<span class="chapters__num">VI</span>
+							<span class="chapters__name">Сосны</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#chapter-7">
+							<span class="chapters__num">VII</span>
+							<span class="chapters__name">Сон</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#chapter-8">
+							<span class="chapters__num">VIII</span>
+							<span class="chapters__name">Пробуждение</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+					<li class="chapters__item">
+						<a class="chapters__link" href="#finale">
+							<span class="chapters__num">Эпилог</span>
+							<span class="chapters__name">Сказка не кончается</span>
+							<span class="chapters__arrow" aria-hidden="true">→</span>
+						</a>
+					</li>
+				</ol>
+
+				<div class="chapters__foot">
+					<span>Ясна · лесная сказка</span>
+					<span>10 глав · 17 кадров</span>
+				</div>
+			</div>
+		</dialog>
+
+		<!-- =================================================================
+		     LIGHTBOX
+		     ================================================================= -->
+		<dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-caption" aria-label="Просмотр фотографий">
+			<div class="lightbox__inner">
+				<button class="dialog-close lightbox__close" type="button" data-lightbox-close aria-label="Закрыть просмотр">
+					✕
+				</button>
+
+				<figure class="lightbox__figure">
+					<picture>
+						<source type="image/webp" />
+						<img class="lightbox__img" alt="" decoding="async" />
+					</picture>
+					<figcaption class="lightbox__caption" id="lightbox-caption" data-lightbox-caption></figcaption>
+				</figure>
+
+				<button class="lightbox__nav lightbox__nav--prev" type="button" data-lightbox-prev aria-label="Предыдущий кадр">
+					←
+				</button>
+				<button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label="Следующий кадр">
+					→
+				</button>
+
+				<p class="lightbox__counter" data-lightbox-counter aria-live="polite"></p>
+			</div>
+		</dialog>
+
+		<script src="script.js" defer></script>
+	</body>
+</html>
