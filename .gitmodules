@@ -16,3 +16,6 @@
 [submodule "web/fairy-tail"]
 	path = web/fairy-tail
 	url = https://github.com/kuzminklk/fairy-tail
+[submodule "web/digital-belarus"]
+	path = web/digital-belarus
+	url = git@github.com:kuzminklk/digital-belarus.git
