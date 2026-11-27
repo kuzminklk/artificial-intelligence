@@ -19,3 +19,6 @@
 [submodule "web/digital-belarus"]
 	path = web/digital-belarus
 	url = git@github.com:kuzminklk/digital-belarus.git
+[submodule "web/reforma"]
+	path = web/reforma
+	url = https://github.com/kuzminklk/reforma
